@@ -1,280 +1,447 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SMM Panel — Instagram / YouTube / Facebook</title>
-<style>
-body {
- font-family: 'Poppins', Arial, sans-serif; background: linear-gradient(-45deg, #FFFF00, #FFFF00, #FFFF00, #54a0ff);;min-height:100vh;overflow-x:hidden}
-h1{text-align:center;color:#fff;padding:20px 10px;text-shadow:1px 1px 3px rgba(0,0,0,.4)}
-.platform-box{background:#fff;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.2);margin:20px auto;padding:20px;max-width:480px}
-.platform-title{display:flex;align-items:center;font-size:1.4em;font-weight:bold;margin-bottom:15px}
-.platform-title img{width:28px;height:28px;margin-right:10px}
-.service{display:flex;justify-content:space-between;align-items:center;background:#f9f9f9;border-radius:12px;padding:12px 16px;margin:8px 0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-.service span{font-size:1em;font-weight:500;color:#333}
-button{background:#0b84ff;color:#fff;border:none;border-radius:12px;padding:8px 14px;cursor:pointer;font-weight:600;transition:background .2s}
-button:hover{background:#0969c7}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:1000}
-.modal-content{background:#fff;border-radius:16px;padding:20px;max-width:400px;width:90%;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center}
-.modal-content h2{margin-top:0;font-size:1.5em;color:#222}
-.input-field{margin:12px 0;text-align:center;width:100%}
-.input-field label{display:block;margin-bottom:6px;font-size:.9em;color:#444}
-.input-field input{width:80%;padding:10px;border-radius:10px;border:1px solid #ccc;text-align:left;margin-bottom:8px}
-.qr-code{margin:50px 0;display:flex;justify-content:center;width:100%}
-.close-btn{margin-top:15px;background:#ccc;color:#333}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;display:none}
-.payment-logos img{margin:0 5px;vertical-align:middle}
-.big-btn{background:#28a745;padding:12px 20px;font-size:1.2em;border:none;border-radius:12px;color:#fff;margin:10px 0;cursor:pointer;transition:background .2s}
-.big-btn:hover{background:#218838}
-#qrExpiredMsg{font-weight:bold;color:#f00;margin:10px 0;}
-#reloadQRBtn{background:#0b84ff;color:#fff;padding:10px 18px;border:none;border-radius:12px;cursor:pointer;margin:10px 0;transition:background .2s}
-#reloadQRBtn:hover{background:#0969c7}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarun Embroidery</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background: #f4f4f4; }
+    h1 { text-align: center; color: #4a0e7e; margin: 10px 0; }
+    
+    .header { 
+      display: flex; justify-content: space-between; align-items: center; 
+      background: #4a0e7e; color: white; padding: 12px; border-radius: 8px; 
+    }
+    .menu-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
+    .spent-btn { background: #d32f2f; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; }
+
+    .worker-row {
+      background: white; 
+      padding: 15px; 
+      margin: 10px 0; 
+      border-radius: 10px; 
+      border: 1px solid #ddd;
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .worker-info { flex: 1; }
+
+    button { 
+      padding: 10px 16px; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-size: 15px;
+    }
+    .open-btn { background: #4a0e7e; color: white; }
+    .money-btn { background: #FF5722; color: white; }
+
+    .modal { 
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.85); 
+      z-index: 100; 
+      overflow: auto; 
+    }
+    .modal-content { 
+      background: white; 
+      margin: 20px auto; 
+      max-width: 650px; 
+      padding: 20px; 
+      border-radius: 12px; 
+    }
+
+    .tab { overflow: hidden; background: #4a0e7e; border-radius: 8px 8px 0 0; }
+    .tab button { background: none; color: white; padding: 14px 20px; border: none; cursor: pointer; }
+    .tab button.active { background: white; color: #4a0e7e; font-weight: bold; }
+    .tabcontent { display: none; padding: 15px; background: white; border: 1px solid #ccc; border-top: none; border-radius: 0 0 8px 8px; }
+
+    input { padding: 12px; margin: 8px 0; width: 100%; box-sizing: border-box; font-size: 16px; }
+    .photo-btn { background: #2196F3; padding: 14px; }
+    .delete-btn { background: #d32f2f; padding: 8px 14px; font-size: 14px; }
+
+    .list-item { 
+      background: white; padding: 12px; margin: 8px 0; border: 1px solid #ddd; 
+      border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .photo-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 5px; cursor: pointer; }
+    .balance { font-size: 24px; font-weight: bold; text-align: center; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    .positive { background: #e8f5e9; color: green; }
+    .negative { background: #ffebee; color: red; }
+  </style>
 </head>
 <body>
-<h1>best smm service provider</h1>
 
-<div id="services"></div>
+  <h1>🧵 Tarun Embroidery</h1>
 
-<!-- Username Verification Modal -->
-<div class="modal" id="verifyModal">
-  <div class="modal-content">
-    <h2 id="verifyTitle">Verify</h2>
-    <div class="input-field">
-      <label id="verifyLabel" for="verifyInput"></label>
-      <input type="text" id="verifyInput" placeholder="">
-    </div>
-    <button onclick="verifyUser()">Verify</button>
-    <button class="close-btn" onclick="closeModal('verifyModal')">Cancel</button>
+  <!-- Header -->
+  <div class="header">
+    <button class="menu-btn" onclick="toggleMenu()">⋮</button>
+    <div><strong>Workers</strong></div>
+    <button class="spent-btn" onclick="showSpentModal()">Spent Money</button>
   </div>
-</div>
 
-<!-- QR Modal with More Payment App Icons -->
-<div class="modal" id="qrModal">
-  <div class="modal-content" style="max-width:400px;align-items:center;">
-    <h2>Scan to Pay via any UPI apps </h2>
-    <div class="payment-logos" style="margin:10px 0;">
-     <div class="payment-logos" style="margin:0px 0; display:flex; justify-content:center; flex-wrap:wrap; gap:8px;">
-  
-</div>
-
-    </div>
-
-    <div class="qr-code" style="margin:5px 0;">
-      <canvas id="qrcode" style="width:400px;height:400px;"></canvas>
-    </div>
-    <div id="amountDisplay" style="font-size:1.6em;font-weight:bold;margin:10px 0;"></div>
-    <div style="margin-bottom:15px;"></div>
-
-    <!-- Countdown -->
-    <div id="countdown" style="margin:10px 0;font-size:1.2em;color:#f00;"></div>
-
-    <!-- UTR Input -->
-    <div class="input-field" id="utrField">
-      <label for="utrInput">Enter your Payment UTR/TXN ID</label>
-      <input type="text" id="utrInput" placeholder="Enter full UTR">
-    </div>
-
-    <!-- Big Green Payment Complete Button -->
-    <button class="big-btn" onclick="verifyUTR()" style="margin-top:10px;">✅ Payment Completed</button>
-
-    <div id="qrExpiredMsg" style="display:none;font-weight:bold;color:#f00;margin:10px 0;">⚠️ QR expired, please reload</div>
-    <button id="reloadQRBtn" style="display:none;">🔁 Reload QR Code</button>
-    <button class="close-btn" onclick="closeModal('qrModal')">Cancel</button>
+  <!-- Menu -->
+  <div id="menuDropdown" style="display:none; position:absolute; left:20px; top:70px; background:white; border:1px solid #ccc; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:200; width:220px;">
+    <div onclick="addNewWorker()" style="padding:15px; cursor:pointer; border-bottom:1px solid #eee;">+ Add New Worker</div>
   </div>
-</div>
-<!-- Payment Not Completed Modal -->
-<div class="modal" id="paymentFailModal">
-  <div class="modal-content">
-    <h2>Payment not completed ❌</h2>
-    <p>Please try again.</p>
-    <button onclick="backToQR()">Back to QR</button>
+
+  <!-- Worker List -->
+  <div id="workerList"></div>
+
+  <!-- Worker Detail Modal (Production + Summary only) -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <h2 id="modalWorkerName" style="color:#4a0e7e;"></h2>
+      <p id="modalJobHeading" style="font-weight:bold; color:#333;"></p>
+
+      <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'production')">Production</button>
+        <button class="tablinks" onclick="openTab(event, 'summary')">Summary</button>
+      </div>
+
+      <div id="production" class="tabcontent" style="display:block;">
+        <input type="number" id="units" placeholder="Units Produced (e.g. 4500)">
+        <button onclick="addProduction()" style="background:#4CAF50;">Add Production</button>
+        <button onclick="takeProductionPhoto()" class="photo-btn">📸 Take Photo</button>
+        <h3>Production History</h3>
+        <div id="productionList"></div>
+      </div>
+
+      <div id="summary" class="tabcontent">
+        <div class="balance" id="totalEarned">Total Earned: ₹0</div>
+        <div class="balance" id="totalGiven">Total Given: ₹0</div>
+        <div class="balance" id="remainingBalance">Remaining Balance: ₹0</div>
+        <button onclick="generateMonthlyReport()" style="background:#FF9800; width:100%; padding:12px;">📅 Generate Monthly Report</button>
+        <h3>Monthly Reports</h3>
+        <div id="monthlyReportsList"></div>
+      </div>
+
+      <button onclick="closeModal()" style="background:#666; margin-top:20px; padding:12px 25px;">Close</button>
+    </div>
   </div>
-</div>
 
-<!-- Payment Success Modal -->
-<div class="modal" id="paymentSuccessModal">
-  <div class="modal-content">
-    <h2>✅ Payment Verified!</h2>
-    <p id="successService"></p>
-    <p id="successUserInput"></p>
-    <p>Your service will be provided soon!</p>
-    <button class="big-btn" onclick="closeModal('paymentSuccessModal')">OK</button>
+  <!-- Given Money Modal -->
+  <div id="givenMoneyModal" class="modal">
+    <div class="modal-content">
+      <h2 id="givenWorkerName"></h2>
+      <input type="number" id="givenAmount" placeholder="Amount Given (₹)" step="0.01">
+      <input type="text" id="givenReason" placeholder="Reason (Weekly, Advance, Bonus...)">
+      <button onclick="addGivenMoney()" style="background:#FF5722; width:100%;">Save Given Money</button>
+      <h3>History</h3>
+      <div id="givenHistoryList"></div>
+      <button onclick="closeGivenModal()" style="background:#666; margin-top:10px;">Close</button>
+    </div>
   </div>
-</div>
 
-<div class="toast" id="toast">Verified successfully ✅</div>
+  <!-- New: Spent Money Modal (Dhaga, Saman etc.) -->
+  <div id="spentModal" class="modal">
+    <div class="modal-content">
+      <h2>💰 Spent Money (Dhaga / Saman)</h2>
+      <input type="number" id="spentAmount" placeholder="Amount Spent (₹)" step="0.01">
+      <input type="text" id="spentReason" placeholder="Reason (Dhaga, Needle, Colour, Bobbin...)">
+      <button onclick="addSpentMoney()" style="background:#d32f2f; width:100%;">Save Spent Record</button>
+      
+      <h3>All Spent History</h3>
+      <div id="spentHistoryList"></div>
+      
+      <button onclick="closeSpentModal()" style="background:#666; margin-top:15px;">Close</button>
+    </div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-<script>
-const UPI_ID = 'bestsmmhg@naviaxis';
-const MERCHANT_NAME = 'Social Media Booster';
-// Multiple valid UTR prefixes
-const UTR_PREFIXES = ["FMPI","ok","T","UTR","utr"];
+  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoCapture(event)">
 
-const SERVICES = [
-  {platform:'Instagram',icon:'https://cdn-icons-png.flaticon.com/512/174/174855.png',items:[
-    {name:'Instagram 1k Followers',price:12,verifyField:{label:'Enter Instagram username',placeholder:'@username'}},
-    {name:'Instagram 10k Followers',price:89,verifyField:{label:'Enter Instagram username',placeholder:'@username'}},
-	 {name:'Instagram Permanent blue tick ☑️',price:109,verifyField:{label:'Enter Instagram username',placeholder:'@username'}},
-    {name:'Instagram 5k Likes',price:21,verifyField:{label:'Enter Post/Reel link',placeholder:'Paste link here'}},
-    {name:'Instagram 10k Reels Views',price:42,verifyField:{label:'Enter Reel link',placeholder:'Paste reel link'}}
-  ]},
-  {platform:'YouTube',icon:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',items:[
-    {name:'YouTube 1k Subscribers',price:51,verifyField:{label:'Enter Channel name',placeholder:'Channel name'}},
-    {name:'YouTube 10k Subscribers',price:499,verifyField:{label:'Enter Channel URL',placeholder:'Paste channel URL'}},
-    {name:'YouTube 5k Video Views',price:320,verifyField:{label:'Enter Video URL',placeholder:'Paste video link'}},
-    {name:'YouTube 10k Shorts Views',price:152,verifyField:{label:'Enter Shorts link',placeholder:'Paste shorts link'}},
-    {name:'YouTube 4000H Watchtime',price:999,verifyField:{label:'Enter Channel URL',placeholder:'Paste channel URL'}}
-  ]},
-  {platform:'Facebook',icon:'https://cdn-icons-png.flaticon.com/512/733/733547.png',items:[
-    {name:'Facebook 1k Followers',price:19,verifyField:{label:'Enter Facebook profile/page link',placeholder:'Paste profile or page link'}},
-    {name:'Facebook 10k Followers',price:189,verifyField:{label:'Enter Facebook page/profile link',placeholder:'Paste profile/page link'}},
-    {name:'Facebook 10k Reels Views',price:49,verifyField:{label:'Enter Reel link',placeholder:'Paste reel link'}},
-    {name:'Facebook 5k Reels Likes',price:29,verifyField:{label:'Enter Reel link',placeholder:'Paste reel link'}}
-  ]}
-];
+  <script>
+    let currentWorkerIndex = null;
+    let currentGivenIndex = null;
+    let workers = JSON.parse(localStorage.getItem('embroideryWorkers')) || [];
+    let spentRecords = JSON.parse(localStorage.getItem('spentRecords')) || [];
 
-let currentService = null;
-let timerInterval;
-
-function renderServices(){
-  const container=document.getElementById('services');
-  SERVICES.forEach(group=>{
-    const box=document.createElement('div');
-    box.className='platform-box';
-    box.innerHTML=`<div class='platform-title'><img src="${group.icon}"/> ${group.platform}</div>`;
-    group.items.forEach(s=>{
-      const row=document.createElement('div');
-      row.className='service';
-      row.innerHTML=`<span>${s.name} — ₹${s.price}</span><button onclick='openVerify(${JSON.stringify(s)})'>Buy</button>`;
-      box.appendChild(row);
-    });
-    container.appendChild(box);
-  });
-}
-
-function openVerify(service){
-  currentService=service;
-  document.getElementById('verifyTitle').innerText=`Verify ${service.name}`;
-  document.getElementById('verifyLabel').innerText=service.verifyField.label;
-  document.getElementById('verifyInput').placeholder=service.verifyField.placeholder;
-  document.getElementById('verifyInput').value='';
-  document.getElementById('verifyInput').focus();
-  document.getElementById('verifyModal').style.display='flex';
-}
-
-function closeModal(id){document.getElementById(id).style.display='none'}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.innerText=msg;t.style.display='block';
-  setTimeout(()=>{t.style.display='none'},2000);
-}
-
-function verifyUser(){
-  const input=document.getElementById('verifyInput').value.trim();
-  if(!input){alert('Please fill the required field');return;}
-  closeModal('verifyModal');
-  showToast('Verified successfully ✅');
-  setTimeout(openQR,500);
-}
-
-function openQR(){
-  const amount=currentService.price;
-  document.getElementById('amountDisplay').innerText = `Amount ₹${amount}`;
-  const upiUrl=`upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${amount}&cu=INR`;
-  const canvas = document.getElementById('qrcode');
-  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-  QRCode.toCanvas(canvas, upiUrl, {width:220, height:220}, err=>{if(err)console.error(err)});
-
-  document.getElementById('qrExpiredMsg').style.display='none';
-  document.getElementById('reloadQRBtn').style.display='none';
-  document.getElementById('qrcode').style.display='flex';
-  document.getElementById('utrInput').value='';
-
-  document.getElementById('qrModal').style.display='flex';
-  startCountdown(5*60);
-}
-
-function startCountdown(seconds){
-  clearInterval(timerInterval);
-  let remaining=seconds;
-  const countdownEl = document.getElementById('countdown');
-  countdownEl.innerText = formatTime(remaining);
-
-  timerInterval = setInterval(()=>{
-    remaining--;
-    countdownEl.innerText = formatTime(remaining);
-    if(remaining <= 0){
-      clearInterval(timerInterval);
-      countdownEl.innerText = '';
-      document.getElementById('qrcode').style.display='none';
-      document.getElementById('qrExpiredMsg').style.display='block';
-      document.getElementById('reloadQRBtn').style.display='inline-block';
+    function saveData() {
+      localStorage.setItem('embroideryWorkers', JSON.stringify(workers));
+      localStorage.setItem('spentRecords', JSON.stringify(spentRecords));
     }
-  },1000);
-}
 
-function formatTime(sec){
-  const m = String(Math.floor(sec/60)).padStart(2,'0');
-  const s = String(sec%60).padStart(2,'0');
-  return `⏱️ ${m}:${s}`;
-}
+    function toggleMenu() {
+      const menu = document.getElementById('menuDropdown');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
 
-document.getElementById('reloadQRBtn').onclick = function(){ openQR(); };
+    function addNewWorker() {
+      const name = prompt("Worker Name:");
+      if (!name || !name.trim()) return;
+      const job = prompt("Embroidery / Design Name:", "General Embroidery");
+      
+      workers.push({
+        id: Date.now(),
+        name: name.trim(),
+        jobHeading: job || "General Embroidery",
+        productions: [],
+        payments: [],
+        monthlyReports: []
+      });
+      saveData();
+      renderWorkerList();
+      toggleMenu();
+    }
 
-function paymentNotCompleted(){
-  closeModal('qrModal');
-  document.getElementById('paymentFailModal').style.display='flex';
-}
+    function renderWorkerList() {
+      const container = document.getElementById('workerList');
+      container.innerHTML = '';
+      if (workers.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:#666; padding:30px;">No workers added yet.<br>Tap ⋮ to add</p>';
+        return;
+      }
+      workers.forEach((worker, index) => {
+        const div = document.createElement('div');
+        div.className = 'worker-row';
+        div.innerHTML = `
+          <div class="worker-info">
+            <strong>${worker.name}</strong><br>
+            <small>${worker.jobHeading}</small>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="open-btn" onclick="showWorkerDetail(${index})">Open</button>
+            <button class="money-btn" onclick="showGivenMoneyModal(${index})">Given Money</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
 
-function backToQR(){
-  closeModal('paymentFailModal');
-  openQR();
-}
+    // Worker Detail
+    function showWorkerDetail(index) {
+      currentWorkerIndex = index;
+      const w = workers[index];
+      document.getElementById('modalWorkerName').textContent = w.name;
+      document.getElementById('modalJobHeading').textContent = w.jobHeading;
+      document.getElementById('detailModal').style.display = 'block';
+      openTab(null, 'production');
+      renderProduction();
+      renderSummary();
+      renderMonthlyReports();
+    }
 
-// UTR verification with multiple prefixes
-function verifyUTR(){
-  const userUTR = document.getElementById('utrInput').value.trim().toUpperCase();
-  if(!userUTR){
-    alert('Please enter your UTR.');
-    return;
-  }
+    function closeModal() { document.getElementById('detailModal').style.display = 'none'; }
 
-  const firstFour = userUTR.substring(0,4);
-  if(UTR_PREFIXES.includes(firstFour)){
-    closeModal('qrModal'); // close QR modal
+    function openTab(evt, tabName) {
+      document.querySelectorAll('.tabcontent').forEach(t => t.style.display = "none");
+      document.getElementById(tabName).style.display = "block";
+      if (evt) {
+        document.querySelectorAll('.tablinks').forEach(b => b.classList.remove('active'));
+        evt.currentTarget.classList.add('active');
+      }
+    }
 
-    // Show success modal
-    document.getElementById('successService').innerText = `Service: ${currentService.name}`;
-    const userInput = document.getElementById('verifyInput').value.trim();
-    document.getElementById('successUserInput').innerText = `Your input: ${userInput}`;
+    // Production (with photo)
+    function takeProductionPhoto() { document.getElementById('cameraInput').click(); }
 
-    document.getElementById('paymentSuccessModal').style.display='flex';
-  } else {
-    alert('Payment not completed ❌Wrong UTR');
-    document.getElementById('utrInput').value='';
-  }
-}
+    function handlePhotoCapture(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const units = parseInt(prompt("Enter units in this photo:", "1000"));
+        if (!units || units <= 0) return alert("Invalid units");
+        const amount = (units / 1000) * 3;
+        workers[currentWorkerIndex].productions.push({
+          date: new Date().toLocaleDateString('en-IN'),
+          units: units,
+          amount: amount.toFixed(1),
+          photo: ev.target.result
+        });
+        saveData();
+        renderProduction();
+        renderSummary();
+      };
+      reader.readAsDataURL(file);
+    }
 
-renderServices();
-</script>
+    function addProduction() {
+      const units = parseInt(document.getElementById('units').value);
+      if (!units || units <= 0) return alert("Enter valid units");
+      const amount = (units / 1000) * 3;
+      workers[currentWorkerIndex].productions.push({
+        date: new Date().toLocaleDateString('en-IN'),
+        units: units,
+        amount: amount.toFixed(1)
+      });
+      saveData();
+      renderProduction();
+      renderSummary();
+      document.getElementById('units').value = '';
+    }
+
+    function renderProduction() {
+      const list = document.getElementById('productionList');
+      list.innerHTML = '';
+      const prods = workers[currentWorkerIndex].productions || [];
+      if (prods.length === 0) {
+        list.innerHTML = '<p style="color:#666; text-align:center;">No production yet.</p>';
+        return;
+      }
+      prods.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        const photoHTML = p.photo ? `<img src="${p.photo}" class="photo-thumb" onclick="showFullPhoto('${p.photo}')">` : '';
+        div.innerHTML = `
+          <div style="flex:1;">
+            <strong>${p.date}</strong> — ${p.units} units = ₹${p.amount}
+          </div>
+          ${photoHTML}
+          <button class="delete-btn" onclick="deleteProduction(${i})">🗑️</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function showFullPhoto(src) {
+      const w = window.open();
+      w.document.write(`<img src="${src}" style="max-width:100%;">`);
+    }
+
+    function deleteProduction(i) {
+      if (confirm("Delete?")) {
+        workers[currentWorkerIndex].productions.splice(i, 1);
+        saveData();
+        renderProduction();
+        renderSummary();
+      }
+    }
+
+    // Given Money
+    function showGivenMoneyModal(index) {
+      currentGivenIndex = index;
+      document.getElementById('givenWorkerName').textContent = workers[index].name;
+      document.getElementById('givenMoneyModal').style.display = 'block';
+      renderGivenHistory();
+    }
+
+    function closeGivenModal() { document.getElementById('givenMoneyModal').style.display = 'none'; }
+
+    function addGivenMoney() {
+      const amt = parseFloat(document.getElementById('givenAmount').value);
+      const reason = document.getElementById('givenReason').value.trim();
+      if (!amt || !reason) return alert("Amount aur reason dono daalo");
+      workers[currentGivenIndex].payments.push({
+        date: new Date().toLocaleDateString('en-IN'),
+        amount: amt.toFixed(1),
+        reason: reason
+      });
+      saveData();
+      renderGivenHistory();
+      document.getElementById('givenAmount').value = '';
+      document.getElementById('givenReason').value = '';
+    }
+
+    function renderGivenHistory() {
+      const list = document.getElementById('givenHistoryList');
+      list.innerHTML = '';
+      const data = workers[currentGivenIndex].payments || [];
+      if (data.length === 0) {
+        list.innerHTML = '<p style="color:#666;">No records yet.</p>';
+        return;
+      }
+      data.forEach(item => {
+        const d = document.createElement('div');
+        d.className = 'list-item';
+        d.innerHTML = `<strong>${item.date}</strong> — ₹${item.amount}<br><small>${item.reason}</small>`;
+        list.appendChild(d);
+      });
+    }
+
+    // New: Spent Money (Dhaga, Saman etc.)
+    function showSpentModal() {
+      document.getElementById('spentModal').style.display = 'block';
+      renderSpentHistory();
+    }
+
+    function closeSpentModal() {
+      document.getElementById('spentModal').style.display = 'none';
+    }
+
+    function addSpentMoney() {
+      const amount = parseFloat(document.getElementById('spentAmount').value);
+      const reason = document.getElementById('spentReason').value.trim();
+      if (!amount || !reason) return alert("Amount aur reason dono bhariye");
+
+      spentRecords.push({
+        date: new Date().toLocaleDateString('en-IN'),
+        amount: amount.toFixed(1),
+        reason: reason
+      });
+
+      saveData();
+      renderSpentHistory();
+      document.getElementById('spentAmount').value = '';
+      document.getElementById('spentReason').value = '';
+      alert("Spent record saved!");
+    }
+
+    function renderSpentHistory() {
+      const list = document.getElementById('spentHistoryList');
+      list.innerHTML = '';
+      if (spentRecords.length === 0) {
+        list.innerHTML = '<p style="color:#666; text-align:center;">No spent records yet.</p>';
+        return;
+      }
+      spentRecords.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `<strong>${item.date}</strong> — ₹${item.amount}<br><small>${item.reason}</small>`;
+        list.appendChild(div);
+      });
+    }
+
+    // Summary
+    function renderSummary() {
+      const w = workers[currentWorkerIndex];
+      let earned = 0, given = 0;
+      (w.productions || []).forEach(p => earned += parseFloat(p.amount || 0));
+      (w.payments || []).forEach(p => given += parseFloat(p.amount || 0));
+      const bal = earned - given;
+
+      document.getElementById('totalEarned').innerHTML = `Total Earned: ₹${earned.toFixed(1)}`;
+      document.getElementById('totalGiven').innerHTML = `Total Given: ₹${given.toFixed(1)}`;
+      const b = document.getElementById('remainingBalance');
+      b.innerHTML = `Remaining: ₹${bal.toFixed(1)}`;
+      b.className = `balance ${bal >= 0 ? 'positive' : 'negative'}`;
+    }
+
+    function generateMonthlyReport() {
+      const w = workers[currentWorkerIndex];
+      if (!w.productions || w.productions.length === 0) return alert("No production data");
+      
+      const month = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+      let units = 0, earned = 0;
+      w.productions.forEach(p => { units += p.units; earned += parseFloat(p.amount); });
+
+      if (!w.monthlyReports) w.monthlyReports = [];
+      w.monthlyReports.unshift({ month, totalUnits: units, totalEarned: earned.toFixed(1), generatedDate: new Date().toLocaleDateString('en-IN') });
+      saveData();
+      renderMonthlyReports();
+      alert(`Monthly Report for ${month} created!`);
+    }
+
+    function renderMonthlyReports() {
+      const list = document.getElementById('monthlyReportsList');
+      list.innerHTML = '';
+      const reports = workers[currentWorkerIndex].monthlyReports || [];
+      reports.forEach(r => {
+        const d = document.createElement('div');
+        d.className = 'list-item';
+        d.innerHTML = `<strong>${r.month}</strong><br>Units: ${r.totalUnits} | Earned: ₹${r.totalEarned}`;
+        list.appendChild(d);
+      });
+    }
+
+    // Initial Load
+    renderWorkerList();
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
